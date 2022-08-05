@@ -1,9 +1,14 @@
 from ossapi import Ossapi
 
+# The api key that you get from https://osu.ppy.sh/p/api
+# Remember to put it in quotation marks
 api_key = None
+
+# Beatmap id, no quotation marks, just an integer.
 beatmap_id = None
 
-
+# What mods to use, numbers come from https://github.com/ppy/osu-api/wiki#mods
+# For mod combinations, just add them
 mods = [0, 64, 1024, 16, 8, 8+64, 8+16]
 
 api = Ossapi(api_key)
