@@ -1,42 +1,43 @@
 from ossapi import Ossapi
-from dotenv import load_dotenv
-import os
 
 
-load_dotenv()
+class beatmapanal:
+    """
+    Grab data for a beatmap and analyze it.
+    """
 
+    def __init__(self, api_key: str):
+        self.api = Ossapi(api_key)
+        # What mods to use, numbers come from https://github.com/ppy/osu-api/wiki#mods
+        # For mod combinations, just add them
+        self.mods = [0, 64, 1024, 16, 8, 8+64, 8+16]
 
-def top_scores(beatmap_id):
-    # The api key that you get from https://osu.ppy.sh/p/api
-    # Remember to put it in quotation marks
-    api_key = os.getenv("API_KEY")
+    def top_scores_chron(self, beatmap_id: int):
+        """
+        Return all top scores in chronological order (in the order they happened).
+        """
+        all_scores = []
 
-    # What mods to use, numbers come from https://github.com/ppy/osu-api/wiki#mods
-    # For mod combinations, just add them
-    mods = [0, 64, 1024, 16, 8, 8+64, 8+16]
+        for i in self.mods:
+            all_scores.append(self.api.get_scores(beatmap_id=beatmap_id, mods=i))
 
-    api = Ossapi(api_key)
+        all_scores_combined = []
 
-    all_scores = []
+        for i in all_scores:
+            for j in i:
+                all_scores_combined.append(j)
 
-    for i in mods:
-        all_scores.append(api.get_scores(beatmap_id=beatmap_id, mods=i))
+        all_scores_combined.sort(key=lambda x: x.date)
 
-    all_scores_combined = []
+        top_scores = []
+        current_top = 0
 
-    for i in all_scores:
-        for j in i:
-            all_scores_combined.append(j)
+        for i in all_scores_combined:
+            score = i.score
+            if score >= current_top:
+                top_scores.append({"username": str(i.username),
+                                   "date": str(i.date),
+                                   "score": str(i.score)})
+                current_top = i.score
 
-    all_scores_combined.sort(key=lambda x: x.date)
-
-    top_scores = []
-    current_top = 0
-
-    for i in all_scores_combined:
-        score = i.score
-        if score >= current_top:
-            top_scores.append({"username":str(i.username), "date":str(i.date), "score":str(i.score)})
-            current_top = i.score
-
-    return top_scores
+        return top_scores
