@@ -1,8 +1,22 @@
-TO RUN:
+This is the backend server for osu! rewind.
 
-Get osu api v1 key using "http://localhost:3914/" as the app url.
-Then set these values in the code. Remember to put the api key in quotation marks.
+This server software provides services that osu! rewind relies on to function.
 
-Then change the value of beatmap_id to the id of the beatmap you wanna see.
+While the intention is to use it with the osu! rewind web client, its basically
+just an api, so use it with anything you want really.
 
-coded in python 3.10, remember to install ossapi with "pip install ossapi"
+Setup:
+
+Create a .env file in /src and set API_KEY, HOST and PORT accordingly.
+
+- API_KEY is an osu api v1 key.
+- HOST is the url the server is running at. Can also be localhost if you want
+  to use a reverse proxy.
+- PORT is the port the webserver is running on.
+
+You need python 3.10 installed and all requirements from requirements.txt
+must be satisfied.
+
+Then just run main.py to start the web server.
+
+Refer to the API documentation on how to use the server.

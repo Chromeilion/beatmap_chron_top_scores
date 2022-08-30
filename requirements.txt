@@ -1,1 +1,3 @@
 ossapi~=2.3.0
+sanic~=22.6.1
+python-dotenv~=0.20.0
